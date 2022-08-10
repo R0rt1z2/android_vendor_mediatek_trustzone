@@ -1,0 +1,13 @@
+diff --git a/cryptfs.c b/cryptfs.c
+index 0b7424a..7b2cf4e 100644
+--- a/cryptfs.c
++++ b/cryptfs.c
+@@ -120,7 +120,7 @@ static int keymaster_init(keymaster0_device_t **keymaster0_dev,
+     int rc;
+ 
+     const hw_module_t* mod;
+-    rc = hw_get_module_by_class(KEYSTORE_HARDWARE_MODULE_ID, NULL, &mod);
++    rc = hw_get_module_by_class(KEYSTORE_HARDWARE_MODULE_ID, "v1", &mod);
+     if (rc) {
+         ALOGE("could not find any keystore module");
+         goto err;

@@ -1,0 +1,4 @@
+1. move soter_new_file/*.java into frameworks/base/keystore/java/android/security/keystore
+2. apply system.patch to system directory
+3. apply hardware.patch to hardware directory
+4. apply framework.patch to framework directory

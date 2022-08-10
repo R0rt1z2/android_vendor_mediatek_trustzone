@@ -1,0 +1,39 @@
+WHAT IT DOES?
+======================
+This is build guide for building TrustKernel-enabled TEE for Android
+
+HOW IT WAS BUILT?
+===============
+Prepare:
+0. copy the tee image to bsp/platform/$(PROJECT)/tee/
+1. copy TA images to ta/
+	the five TAs are needed (see in bsp/platform/$(PROJECT)/scripts/device_trustkernel.mk):
+		keymaster_v1, gatekeeper, ifaa_v2, kph, fingerprint
+2. copy CA images to ca/
+3. copy tkcore_apps/client to client/
+4. copy TUIService(from tkcore_app/android_apps/tuiservice) to external/
+5. copy bsp/platform/mt6755/scripts/*.te into device/mediatek/common/sepolicy/
+
+Build:
+1. cd to bsp/platform/$(PROJECT)/patches and apply the three patches to the Android system
+2. call `mm` to build the subdirectory to the Android system image
+	for the first time, you need to go to the home directory and build the whole Android image and boot image 
+	(`make bootimage` and `make systemimage`)
+3. call `../../custom/build/fast_build.sh` to build the trustzone.bin
+4. call `make bootimage -j$(processors)` to build the boot.img
+
+HOW TO USE IT?
+======================
+Build Result:
+1. the selinux policies and the init scripts are compiled into boot.img.
+2. the Android services and the libraries are compiled into system.img
+3. the TEE image is compiled into trustzone.bin
+
+Customization:
+Edit the bsp/platform/$(PROJECT)/scripts/device_trustkernel.mk and add the desired libs and applications to system.img
+
+
+HOW TO VERIFY THE CONFIGURATION
+=====================
+1. install `tools/apks/teeotaverifier_v0.1.apk` into the device (`adb install -r tools/apks/teeotaverifier_v0.1.apk`)
+2. execute the script `tools/bsp_verifier.py` to see the result  (BUG: NS and TEE validation is not fully supported yet)

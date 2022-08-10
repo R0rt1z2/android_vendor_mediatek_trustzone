@@ -1,0 +1,10 @@
+1. system_vold_cryptfs.c.patch
+* SHALL be applied for Android N.
+* Applied under directory system/vold/, over cryptfs.c.
+
+2. system_core_init_init.cpp.patch
+* SHALL be applied if failed to boot due to SELINUX error on /dev/urandom.
+* Applied under directory system/core/init, over init.cpp.
+
+
+

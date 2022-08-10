@@ -1,0 +1,370 @@
+#1801rc9
+- CHANGES:
+    * pl patches/tee binary: pie
+    * init scripts: bugfix for start of service on meta/factory
+    * km2/km1: Android.mk bugfix
+
+#1801rc8
+- CHANGES:
+    * bugfix on sdrpmb
+    * change class of teed to early_hal for fbe
+    * fix bug on failed to program attestation key
+
+#1801rc7
+- CHANGES:
+    * TA/km2: bugfix on attestation
+    * tee: upgrade to 0.7.x for mt6570/mt6580/mt6735/mt6735m/mt6753/mt6755/mt6739
+    * kph/pld/kphproxy/libpl
+        * support protect truststore
+        * support volume license
+    * mt6735 pl/lk update
+        * support multiple value of write protection group size
+    * mt6580 pl/lk update
+    * mt6739 pl/lk update
+
+#1801rc6
+- CHANGES:
+    * TA/km2: bugfix on memory leak
+
+#1801rc5
+- CHANGES:
+    * support mt6570
+    * mt6580: support sdrpmb
+    * teed/scripts: support customized protect_f partition
+
+#1801rc4
+- CHANGES:
+    * meta: 3.1.6: bugfix: return correct return value for command
+    * kmsetkey: refine starting logic
+    * sepolicy: allow hal_keymaster_attestation to call tkcoredrv
+
+#1801rc3
+- CHANGES:
+    * hal
+        * simplify start logic
+        * Add kmsetkey.trustkernel
+    * device.trustkernel.mk:
+        * auto select between installation of 64bit/32bit binaries
+    * teed: refine logging
+    * tee.bin:
+        * bootable with standard aosp images (both 32bit/64bit)
+        * fix bug in SDRPMB
+    * meta
+        * Add default sn since SN is not acquireable in Android O
+    * km2:
+        * pass VTS
+        * fetch keybox from kph TA for key attestation
+    * kph
+        * decode/store keybox
+        * allow to manage TA data with given tag/perm
+    * driver
+        * register log irq as type IRQ_EDGE
+
+#1801rc2
+- CHANGES:
+    * install hal module under /vendor
+    * fix init scripts
+    * update patches for mt6739/mt6763
+        * use clkmgr for spi
+    * update meta
+        * store temp data in /storage/tee
+    * update tee binary for
+        * mt6580/mt6735/mt6755/mt6757/mt6739/mt6763
+    * teed
+
+#1801rc1
+- CHANGES:
+* support android o
+    * sepolicy
+    * include new gk ta
+    * add kmsetkey library
+* teed
+    * use param to specify ta path
+    * bugfix on sdrpmb
+* tkcoredrv
+    * bugfix on dereferencing userspace pointer
+    * format code
+* mt6739
+    * use polling spi
+    * fix conflicted irq number
+* ca
+    * kph/pld
+
+
+#1708p6
+
+- CHANGES:
+* kernel driver: 3.1p5
+  * support spi pad group configuration
+
+#1708p5
+
+- CHANGES:
+* support mt6763/mt6797
+* tee.bin:
+  * mt6735/mt6753/mt6755/mt6580
+* meta
+  * support secondary license programming
+  * support get cert digest
+* Add features: SDRPMB
+  * include patchsets for lk/pl
+* kph/pl/kphproxy
+  * support get cert digest
+  * support get truststore type
+  * support secondary license programming
+  * kph: refine read/update/overwrite provision state
+* tkcoredrv
+  * bugfix for false alarm
+* gatekeeper: use another time as throttle
+* remove builtin python package
+
+#1708p4
+- CHANGES
+* tee.bin: mediatek platform: improve security check
+* kph: upload brand/model/platform info in delayed provisioning
+* device.mk: disable fingerprintd package by default
+
+#1708p3
+- CHANGES
+* tee.bin: mediatek platform: improve security check/more license type
+* teed/pld: more license type
+* kph TA: refine soter logic/more security check
+* km2 TA: less logs in critical logic
+* remove fingerprint related content
+* integrate python crypto library
+* fix the bug that /data/tee/tkcore.log cannot be accessed in user build
+
+#1708p2
+- CHANGES
+* meta: filter command that can be executed
+* remove outdated/useless components/configurations
+
+#1708p1
+- CHANGES
+* teed: bugfix/better logging
+* tee.bin: bugfix
+* kph TA/CA/lib: bugfix
+
+#1708rc8
+- CHANGES
+* meta-3.1.0: update meta code/sepolicy
+
+#1708rc7
+- CHANGES
+* teed: work with latest version of kph
+* km/kph: support soter; new interface for kph
+
+#1708rc6
+- CHANGES
+* tee.bin: mt6580: updated to v0.6.3-gp: fix bug in power mgmt
+
+#1708rc5
+- CHANGES
+- tee.bin: port mt6757 to latest version
+- ATF: handle wdt irq correctly
+- Add ro.mtk.trustkernel_tee_support=1 to /system/build.prop
+- Allow tkcore daemon to chmod on files in /data/tee/
+
+#1708rc4
+- CHANGES
+- Remove the call to tee_spi_transfer_disable():
+    * The initialization drivers of several fingerprint vendors are late,
+      calling tee_spi_transfer_disable() can prevent them from reading the
+      correct chip id during the probe process in their drivers.
+- teed: change to 2.1p3 to avoid deadlock
+- driver: change to nsdrv-3.1p2. Several static TA might not be able to
+      function correctly if teed is not ready, even task does not really
+      rely on a user mode teed to handle
+
+#1708rc3
+- CHANGES
+* ta: use the correct pem to sign
+* test/ta: re-signed with system_ta.pem
+    - maintain debug/release versions separately is not necessary any more
+
+#1708rc2
+- CHANGES
+* tee.bin: mt6735/mt6735m/mt6753/mt6755/mt6580 is updated to v0.6.2-gp
+    - support for mt6757/mt6795 is temporarily removed
+* teed: updated to 2.1p1
+    - support device-project verification
+* CA/kph: updated to work with libpl.so
+* CA/pld: tools to check device certificate programming state
+* CA/libpl.so: libraries for developers to check device
+    certificate programming state
+* TA: re-signed with system_ta.pem
+* CA/libcheck_keystate: obsolete removed
+
+#1708rc1
+- CHANGES
+* Refine build mechanism
+    - Add tools/scripts for convenience of build
+    - Change patches related to build
+    - Remove obsolete TA
+
+#1706p6
+
+-CHANGES
+* ca/kph: open exported file in O_TRUNC mode
+* ta/kph: always export the latest data
+
+#1706p5
+
+-CHANGES
+* meta: updated to 2.12: bugfix for error in write_keyflag
+
+#1706p4
+
+-CHANGES
+* meta: bugfix for dirty buffer & tag version
+    - use `strings meta_tst | grep metaserver` to get version
+
+#1706p3
+
+-CHANGES
+* kph: support device model with trailing letter, e.g: MT6737T, MT6737M
+
+#1706p2
+
+- CHANGES
+* kph
+    - acquire info automatically from getprop
+    - change implementation of EndorsementSign
+* driver/teed/libteec
+    - support install ta
+
+#1706p1
+
+- CHANGES
+* Fix corrupted patches
+* Update preloader patches for preloader to support meta over uart
+* Update tee.bin:
+    - support meta over uart
+    - extend sensor limitation to 12b/20 times
+    - extend memory size to 36MB, except for mt6757
+    - support tee_spi_transfer_disable() API
+
+#1706p0rc3
+
+- CHANGES
+* Support mt6757
+* mt6753: adjust patch structures
+* update libcheck_keystate / test_check_keystate
+* drivers: export tee_spi_transfer_disable()
+* Add ueventd.rc patches
+* meta: label meta_tst with class late_start
+* kph: add API to check rpmb state
+* common patches
+    - Add optional patches for system/vold/cryptfs.c & system/core/init/init.cpp
+    - Remove legacy meta_code
+    - remove prebuilt keystore/gatekeeper libraries
+
+#1706p0rc2
+
+- CHANGES
+* kernel patches
+    - spi: call tee_spi_transfer_disable()
+    - mt6580: replace hard coded asm code
+* meta:
+    - updated to 2.0
+
+#1706p0rc1
+
+- CHANGES
+* tee.bin:
+    - Refactoring
+    - Refine log printing
+    - Delaying with better accuracy
+    - Version control
+
+* drivers:
+    - Merge drivers for 6580 and others.
+        - Merge 64bit tee_kernel_api for platform other than mt6580
+        - Merge tee_spi_transfer for platform other than mt6580
+    - Refine pm mgmt.
+    - Refine spi clock control
+    - Rewrite smc control mechanism
+    - Better logging / debugging mechanism
+    - Better version control
+
+* Others:
+    - Add gptest/tee-test ca/ta
+    - Add libs/headers for check_keystate
+    - Improve tkcore_daemon.te
+    - Update libteec.so, fix inconsistent ioctl param with driver
+
+#1702p13
+
+- CHANGES
+* mt6580: tee.bin: more log, enable sensor detector & extend limitation
+
+#1702p12
+
+- CHANGES
+* kpha: add logging
+* mt6735/mt6755/mt6735m/mt6753: tee.bin: more log, enable sensor detector
+
+#1702p11
+
+- CHANGES
+* teed: update to nsclient-2.0p4
+* mt6735/mt6755: patches: keep spi clock closed
+
+#1702p10
+
+- CHANGES
+* tee.bin: add support for mt6753
+
+#1702p9
+
+- CHANGES
+* ta/gatekeeper: fix the bug potentially leading to
+  failure when unlocking screen
+* mt6735/mt6735m/mt6755: update tee.bin
+
+#1702p8
+
+- CHANGES
+* kph/teed: update pl related logic
+* add pl config data
+
+#1702p7
+
+- CHANGES
+* driver/tkcore: disable CONFIG_TRUSTKERNEL_TEE_SUPPORT by default
+
+#1702p6
+
+- CHANGES
+* mt6735/mt6735m: update tee.bin: bugfix on RPMB
+
+#1702p5
+
+- CHANGES
+* mt6580: update tee.bin: bugfix for cache maintenance
+
+#1702p4
+
+- CHANGES
+* meta: fix the malformed patch
+* mt6580: correct the name of spi clock in kernel-3.18 patch
+
+#1702p3
+
+- CHANGES
+* mt6580/6735/6755: bugfix for freezing after suspending.
+* Adjust organization of kernel patches.
+
+# 1702p2
+
+- CHANGES
+* mt6580: tee.bin: support SPI(w/ DMA)
+* drivers/tkcore-mt6580: bugfix
+* teed/libteec.so: move system TA dir to /system/app/t6
+
+# 1702p1
+
+- CHANGES
+* tee.bin: support mt6580
+* Add drivers/tkcore-mt6580
+* mt6580 kernel patches

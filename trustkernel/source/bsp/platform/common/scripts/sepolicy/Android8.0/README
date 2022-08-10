@@ -1,0 +1,3 @@
+HOWTO USE IT
+	copy tkcore_daemon.te ${PROJECT}/device/mediatek/common/sepolicy/bsp/
+	apply untrusted_app.te.patch over ${PROJECT}/device/mediatek/common/sepolicy/bsp/untrusted_app.te

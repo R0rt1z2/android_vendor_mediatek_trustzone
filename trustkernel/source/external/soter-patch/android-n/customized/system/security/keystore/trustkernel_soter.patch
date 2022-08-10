@@ -1,0 +1,72 @@
+diff --git a/Android.mk b/Android.mk
+--- a/Android.mk
++++ b/Android.mk
+@@ -27,6 +27,13 @@ ifeq ($(USE_32_BIT_KEYSTORE), true)
+ LOCAL_MULTILIB := 32
+ endif
+ LOCAL_CFLAGS := -Wall -Wextra -Werror -Wunused
++
++ifeq ($(strip $(TRUSTKERNEL_TEE_SUPPORT)), yes)
++ifeq ($(strip $(MTK_SOTER_SUPPORT)), yes)
++LOCAL_CFLAGS += -DTRUSTKERNEL_SOTER
++endif
++endif
++
+ LOCAL_SRC_FILES := \
+ 	auth_token_table.cpp \
+ 	blob.cpp \
+diff --git a/key_store_service.cpp b/key_store_service.cpp
+--- a/key_store_service.cpp
++++ b/key_store_service.cpp
+@@ -606,7 +606,37 @@ int32_t KeyStoreService::generateKey(const String16& name, const KeymasterArgume
+ 
+     const auto* device = mKeyStore->getDevice();
+     const auto* fallback = mKeyStore->getFallbackDevice();
++#ifdef TRUSTKERNEL_SOTER
++    std::vector<keymaster_key_param_t> opParams; // Do the copy from params manually
++    keymaster_key_param_t ask = {KM_TAG_INVALID, {0}};
++
++    for (std::vector<const keymaster_key_param_t>::iterator param = params.params.cbegin();
++        param != params.params.cend(); ++param) {
++        if ((*param).tag == KM_TAG_SOTER_AUTO_SIGNED_COMMON_KEY_WHEN_GET_PUBLIC_KEY) {
++            Blob keyBlob;
++            String8 keyName(reinterpret_cast<const char*>((*param).blob.data), (*param).blob.data_length);
++
++            ResponseCode rc = mKeyStore->getKeyForName(&keyBlob, keyName, uid,
++                TYPE_KEYMASTER_10);
++            if (rc != ::NO_ERROR) {
++                ALOGE("Reading %s failed (%d)", keyName.string(), rc);
++                continue;
++            }
++
++            ask.tag = KM_TAG_SOTER_AUTO_SIGNED_COMMON_KEY_WHEN_GET_PUBLIC_KEY;
++            ask.blob.data = (uint8_t*) malloc(keyBlob.getLength());
++            memcpy((void*)(ask.blob.data), keyBlob.getValue(), keyBlob.getLength());
++            ask.blob.data_length = keyBlob.getLength();
++
++            opParams.push_back(ask);
++        } else {
++            opParams.push_back(*param);
++        }
++    }
++#else
+     std::vector<keymaster_key_param_t> opParams(params.params);
++#endif
++
+     const keymaster_key_param_set_t inParams = {opParams.data(), opParams.size()};
+     if (device == NULL) {
+         return ::SYSTEM_ERROR;
+@@ -648,6 +678,13 @@ int32_t KeyStoreService::generateKey(const String16& name, const KeymasterArgume
+         outCharacteristics->characteristics = out;
+     }
+ 
++#ifdef TRUSTKERNEL_SOTER
++    if (ask.blob.data != NULL) {
++        free((void*)ask.blob.data);
++        ask.blob.data= NULL;
++    }
++#endif
++
+     if (rc) {
+         return rc;
+     }

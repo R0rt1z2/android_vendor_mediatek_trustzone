@@ -1,0 +1,46 @@
+diff --git a/non_plat/file_contexts b/non_plat/file_contexts
+index ad6098b..db0ed0d 100644
+--- a/non_plat/file_contexts
++++ b/non_plat/file_contexts
+@@ -13,6 +13,19 @@
+ /data/wo_ipsec(/.*)? u:object_r:epdg_ipsec_conf_file:s0
+ /data/wo_ipsec/wo(/.*)? u:object_r:epdg_apn_conf_file:s0
+ 
++######################
++# TrustKernel add
++/dev/tkcoredrv u:object_r:tkcore_admin_device:s0
++/vendor/bin/teed u:object_r:tkcore_exec:s0
++/data/tee(/.*)? u:object_r:tkcore_data_file:s0
++/protect_f/tee(/.*)? u:object_r:tkcore_data_file:s0
++/vendor/app/t6(/.*)? u:object_r:tkcore_systa_dir:s0
++/data/tee/t6(/.*)? u:object_r:tkcore_spta_dir:s0
++/data/teec.log u:object_r:tkcore_log_file:s0
++/data/tee/tkcore.log u:object_r:tkcore_log_file:s0
++/dev/block/platform/mtk-msdc\.0/[0-9]+\.(msdc|MSDC)0/by-name/sdrpmb u:object_r:tkcore_block_device:s0
++
++
+ ##########################
+ # Devices
+ #
+diff --git a/non_plat/property_contexts b/non_plat/property_contexts
+index 95739c1..cbe8b73 100644
+--- a/non_plat/property_contexts
++++ b/non_plat/property_contexts
+@@ -90,3 +90,5 @@ persist.mtk_disable_cap_switch    u:object_r:usp_prop:s0
+ net.epdg.   u:object_r:mtk_epdg_prop:s0
+ persist.net.epdg.   u:object_r:persist_epdg_prop:s0
+ 
++trustkernel.   u:object_r:tkcore_prop:s0
++
+diff --git a/non_plat/untrusted_app.te b/non_plat/untrusted_app.te
+index b181fe5..06410b3 100644
+--- a/non_plat/untrusted_app.te
++++ b/non_plat/untrusted_app.te
+@@ -12,6 +12,7 @@ allow untrusted_app proc_secmem:file { read ioctl open };
+ # Operation : TEEI Migration
+ # Purpose : allow teei tester APK to use teei_client_device
+ allow untrusted_app teei_client_device:chr_file write;
++allow untrusted_app tkcore_admin_device:chr_file  { ioctl read write open };
+ 
+ # Date : 2014/09/04
+ # Stage: BaseUT

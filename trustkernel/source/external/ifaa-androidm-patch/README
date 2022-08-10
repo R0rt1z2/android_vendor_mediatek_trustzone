@@ -1,0 +1,14 @@
+WHAT IT IS
+===================
+This is the TrustKernel IFAA 2.0 AndroidM framework files
+
+
+How to Integrate
+==================
+Copy the folder of `org` to Android framework/base/core/java/org
+
+
+Dependencies
+==================
+The framework files depend on libteeclientjni.so to work. 
+You need to add the 32bit version of libteeclientjni.so to /system/lib/ and the 64bit version of libteeclientjni.so to /system/lib64

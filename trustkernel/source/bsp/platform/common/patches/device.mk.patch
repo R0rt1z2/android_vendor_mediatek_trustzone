@@ -1,0 +1,11 @@
+diff --git a/device/mediatek/mt6755/device.mk b/device/mediatek/mt6755/device.mk
+index 5ac2a35..8b71806 100644
+--- a/device/mediatek/mt6755/device.mk
++++ b/device/mediatek/mt6755/device.mk
+@@ -1,4 +1,7 @@
++ifeq ($(strip $(TRUSTKERNEL_TEE_SUPPORT)), yes)
++$(call inherit-product, vendor/mediatek/proprietary/trustzone/trustkernel/source/bsp/platform/common/scripts/device_trustkernel.mk)
++endif
+ 
+ PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml
+ PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml
